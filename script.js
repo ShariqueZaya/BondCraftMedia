@@ -685,7 +685,7 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 
 
-/* ---------- Work photos: placeholder check + mask reveal ---------- */
+/* ---------- Work photos: placeholder check ---------- */
 (function () {
   "use strict";
 
@@ -700,44 +700,6 @@ document.addEventListener("DOMContentLoaded", () => {
     img.addEventListener("error", markMissing);
     if (img.complete && img.naturalWidth === 0) markMissing();
   });
-
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce || !("IntersectionObserver" in window)) return;
-
-  function start() {
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          const el = entry.target;
-
-          if (entry.isIntersecting) {
-            el.classList.add("is-visible");
-            observer.unobserve(el);
-            setTimeout(() => el.classList.remove("mask-reveal", "is-visible"), 2000);
-          } else if (entry.boundingClientRect.top < 0) {
-            el.classList.remove("mask-reveal");
-            observer.unobserve(el);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    photos.forEach(figure => {
-      figure.classList.add("mask-reveal");
-      observer.observe(figure);
-    });
-  }
-
-  function whenIntroDone() {
-    if (document.body.classList.contains("intro-active")) {
-      setTimeout(whenIntroDone, 120);
-    } else {
-      start();
-    }
-  }
-
-  whenIntroDone();
 })();
 
 
